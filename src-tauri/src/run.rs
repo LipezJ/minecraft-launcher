@@ -35,3 +35,18 @@ pub fn run_minecraft(window: Window, version: String) {
 	});
 }
   
+#[tauri::command]
+pub fn run_explorer(path: String) {
+
+  #[cfg(target_os = "windows")]
+  let path = path.replace("/", "\\");
+
+  let (mut rx, _) = Command::new("explorer")
+    .args([ get_minecraft_path() + path.as_str() ])
+    .spawn()
+    .expect("failed to execute process");
+
+  tauri::async_runtime::spawn(async move {
+    let _ = rx.recv().await;
+  });
+}

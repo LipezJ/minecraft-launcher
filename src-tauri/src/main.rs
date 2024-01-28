@@ -6,6 +6,7 @@ mod utils;
 mod install;
 
 use tauri::Window;
+use run::run_explorer;
 use utils::get_minecraft_path;
 
 #[tauri::command]
@@ -55,7 +56,8 @@ fn main() {
 			run_minecraft,
 			get_installed_versions,
 			get_version_list,
-			install_minecraft_version
+			install_minecraft_version,
+			run_explorer
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");

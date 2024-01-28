@@ -86,7 +86,7 @@ pub async fn get_version_list() -> Result<Vec<MineVersionInfo>, Error> {
 pub fn get_minecraft_path() -> String{
 	let user = std::env::var("USERNAME").unwrap();
 	#[cfg(target_os = "windows")]
-	return format!("C:/Users/{}/AppData/Roaming/.minecraft", user);
+	return format!("C:\\Users\\{}\\AppData\\Roaming\\.minecraft", user);
 	#[cfg(target_os = "linux")]
 	return format!("/home/{}/.minecraft", user);
 }
