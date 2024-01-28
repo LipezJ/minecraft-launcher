@@ -1,0 +1,33 @@
+{
+  "name": "launcher",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build-sidecar": "python scripts/build_sidecar.py",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri"
+  },
+  "dependencies": {
+    "@preact/signals": "^1.2.2",
+    "@tauri-apps/api": "^1.5.2",
+    "flowbite": "^2.2.1",
+    "preact": "^10.16.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.5.0",
+    "@tauri-apps/cli": "^1.5.8",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "autoprefixer": "^10.4.17",
+    "eslint-plugin-preact": "^0.1.0",
+    "postcss": "^8.4.33",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.0.2",
+    "vite": "^5.0.0"
+  },
+  "eslintConfig": {
+    "extends": "@preact/eslint-config-preact"
+  }
+}
