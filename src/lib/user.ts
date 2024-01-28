@@ -1,4 +1,5 @@
 import { signal } from '@preact/signals'
+import { ModalManager } from './modals'
 
 export interface UsersInterface {
   selected: number
@@ -28,9 +29,7 @@ export class Users {
 			}
 		}
 
-		Users.users.subscribe(() => {
-			Users.saveState()
-		})
+		Users.saveState()
 	}
 
 	static saveState() {
@@ -39,34 +38,47 @@ export class Users {
 
 	static add(user: string) {
 
+		if (Users.users.value.users.includes(user)) return
+
 		Users.users.value = {
 			...Users.users.value,
 			users: [...Users.users.value.users, user]
 		}
+		Users.setDefault(user)
+		ModalManager.hide('users-modal')
 		Users.saveState()
 	}
 
 	static remove(user: string) {
 
-		const { users, selected: selected } = Users.users.value
+		if (Users.users.value.users.length < 2) return
 
-		if (users.indexOf(user) === selected) {
-			Users.users.value.selected = 0
+		const { users, selected: selected } = Users.users.value
+		const index = users.indexOf(user)
+
+		if (index === selected) {
+			Users.users.value.selected = index - 1
 		}
+
 		Users.users.value.users = users.filter(u => u !== user)
 
 		Users.users.value = {
-			...Users.users.value
+			...Users.users.value,
+			selected: index
 		}
-		
+
 		Users.saveState()
 	}
 
 	static setDefault(user: string) {
 
 		const index = Users.users.value.users.indexOf(user)
+
 		if (index > -1) {
-			Users.users.value.selected = index
+			Users.users.value = {
+				...Users.users.value,
+				selected: index
+			}
 		} else {
 			// TODO: throw error
 		}

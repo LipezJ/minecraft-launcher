@@ -1,3 +1,4 @@
+import { Users } from './user'
 import { invoke } from '@tauri-apps/api'
 import { signal } from '@preact/signals'
 import { ModalManager } from './modals'
@@ -78,8 +79,9 @@ export default class Minecraft {
 	static async run() {
 
 		const { versions, selectedVersion } = Minecraft.versions.value
+		const user = Users.users.value.users[Users.users.value.selected]
 		
-		await invoke('run_minecraft', { version: versions[selectedVersion] })
+		await invoke('run_minecraft', { version: versions[selectedVersion], username: user })
 		Minecraft.isLoading.value = true
 	}
 

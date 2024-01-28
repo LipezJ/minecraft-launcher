@@ -6,13 +6,9 @@ mod utils;
 mod install;
 
 use tauri::Window;
-use run::run_explorer;
+use run::{run_explorer, run_minecraft};
 use utils::get_minecraft_path;
 
-#[tauri::command]
-fn run_minecraft(window: Window, version: String) {
-	run::run_minecraft(window, version);
-}
 
 #[tauri::command]
 fn get_installed_versions() -> Vec<String> {

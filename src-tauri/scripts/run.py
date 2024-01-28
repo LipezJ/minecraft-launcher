@@ -5,11 +5,12 @@ import sys
 
 import minecraft_launcher_lib
 
-def run_minecraft(mine_user):
+def run_minecraft():
     '''Run Minecraft'''
 
     version = sys.argv[1]
     minecraft_directory = sys.argv[2]
+    mine_user = sys.argv[3]
 
     options = {
         'username': mine_user,
@@ -28,4 +29,4 @@ def run_minecraft(mine_user):
     subprocess.run(minecraft_command, check=False)
 
 if __name__ == '__main__':
-    run_minecraft('lopez')
+    run_minecraft()
