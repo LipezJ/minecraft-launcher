@@ -1,5 +1,5 @@
 import { VNode } from 'preact'
-import { InstallModal } from '../lib/modals'
+import { ModalManager } from '../lib/modals'
 import { InstallIcon } from './Icons'
 
 export function SideMenu() {
@@ -19,7 +19,7 @@ export function SideMenu() {
 			} />
 			<MenuElement 
 				text="Install" 
-				onClick={InstallModal.show}
+				onClick={() => ModalManager.show('install-modal')}
 				icon={
 					<InstallIcon />
 				} 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'preact/hooks'
 
 import Minecraft from '../../lib/mine'
-import { InstallModal } from '../../lib/modals'
+import { ModalManager } from '../../lib/modals'
 
 import { Badge } from '../ui/Badge'
 import { Cube, DownloadIcon, CloseIcon, Loader } from '../Icons'
@@ -13,14 +13,14 @@ export function Install() {
 	const installedVersions = Minecraft.versions.value
 
 	useEffect(() => {
-		InstallModal.init(modalRef)
+		ModalManager.init(modalRef, 'install-modal')
 		Minecraft.getVersionsList()
 	}, [])
 
 	return (
 		<div 
 			ref={modalRef} 
-			id="timeline-modal" 
+			id="install-modal" 
 			tabIndex={-1} 
 			aria-hidden="true" 
 			className="hidden overflow-y-auto overflow-x-hidden absolute top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100dvh-1rem)] max-h-full"
@@ -32,10 +32,10 @@ export function Install() {
               Versiones
 						</h3>
 						<button 
-							onClick={InstallModal.hide}  
+							onClick={() => ModalManager.hide('install-modal')}  
 							type="button" 
 							className="text-gray-400 bg-transparent rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center hover:bg-gray-600 hover:text-white" 
-							data-modal-toggle="timeline-modal"
+							data-modal-toggle="install-modal"
 						>
 							<CloseIcon />
 							<span className="sr-only">Close modal</span>

@@ -1,6 +1,6 @@
 import { invoke } from '@tauri-apps/api'
 import { signal } from '@preact/signals'
-import { InstallModal } from './modals'
+import { ModalManager } from './modals'
 
 interface Versions {
 versions: string[]
@@ -129,7 +129,7 @@ export default class Minecraft {
 	}
 
 	static installVersion(version: string) {
-		InstallModal.hide()
+		ModalManager.show('install-modal')
 		invoke('install_minecraft_version', { version })
 	}
 

@@ -1,36 +1,56 @@
 import { type Ref } from 'preact/hooks'
 import { signal } from '@preact/signals'
 import { Modal } from 'flowbite'
-import type { ModalOptions, InstanceOptions, ModalInterface } from 'flowbite'
+import type { ModalOptions, InstanceOptions } from 'flowbite'
 
-export class InstallModal {
+export class ModalManager {
 
-	static modal = signal<ModalInterface | undefined>(undefined)
+	static modals = signal<Record<string, Ref<HTMLDivElement>>>({})
 
-	static modalOptions: ModalOptions = {
-		placement: 'center',
-		backdrop: 'dynamic',
-		backdropClasses: 'bg-gray-900/80 fixed inset-0 z-40',
-		closable: true
-	}
-
-	static instanceOptions: InstanceOptions = {
-		id: 'install-modal',
-		override: true
-	}
-
-	static init(modal: Ref<HTMLDivElement>) {
+	static init(modal: Ref<HTMLDivElement>, id: string) {
 		if (modal.current == null) return
 		
-		this.modal.value = new Modal(modal.current, this.modalOptions, this.instanceOptions)
+		this.modals.value = {
+			...this.modals.value,
+			[id]: modal
+		}
 	}
 
-	static show() {
-		InstallModal.modal.value?.show()
+	static getOptions(): ModalOptions {
+		return {
+			placement: 'center',
+			backdrop: 'dynamic',
+			backdropClasses: 'bg-gray-900/80 fixed inset-0 z-40',
+			closable: true
+		}
 	}
 
-	static hide() {
-		InstallModal.modal.value?.hide()
+	static getInstanceOptions(id: string): InstanceOptions {
+		return {
+			id,
+			override: true
+		}
 	}
 
+	static show(id: string) {
+
+		const modal = this.modals.value[id].current
+		if (modal == null) return
+
+		const options = this.getOptions()
+		const instanceOptions = this.getInstanceOptions(id)
+
+		new Modal(modal, options, instanceOptions).show()
+	}
+
+	static hide(id: string) {
+
+		const modal = this.modals.value[id].current
+		if (modal == null) return
+
+		const options = this.getOptions()
+		const instanceOptions = this.getInstanceOptions(id)
+
+		new Modal(modal, options, instanceOptions).hide()
+	}
 }
