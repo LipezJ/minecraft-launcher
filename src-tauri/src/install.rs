@@ -1,9 +1,12 @@
 use tauri::{api::process::{Command, CommandEvent}, Window};
+use crate::utils::get_os_path;
 
 pub fn install_minecraft_version(window: Window, version: String, path: String) {
 
+  let scripts_path = get_os_path() + "scripts/install.py";
+
   let (mut rx, _) = Command::new("py")
-    .args(["scripts/install.py", &version, &path])
+    .args([&scripts_path, &version, &path])
     .spawn()
     .expect("failed to execute process");
 

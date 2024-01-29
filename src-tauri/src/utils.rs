@@ -90,3 +90,12 @@ pub fn get_minecraft_path() -> String{
 	#[cfg(target_os = "linux")]
 	return format!("/home/{}/.minecraft", user);
 }
+
+pub fn get_os_path() -> String {
+  #[cfg(target_os = "windows")] {
+    return "".to_string();
+  }
+  #[cfg(target_os = "linux")] {
+    return "/usr/lib/minecraft-launcher/".to_string();
+  }
+} 
