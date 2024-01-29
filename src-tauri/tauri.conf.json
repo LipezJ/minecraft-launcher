@@ -34,8 +34,7 @@
         "icons/icon.ico"
       ],
       "resources": [
-        "scripts/**/*",
-        "bin/python/**/*"
+        "scripts/**/*"
       ]
     },
     "security": {
