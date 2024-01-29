@@ -99,3 +99,12 @@ pub fn get_os_path() -> String {
     return "/usr/lib/minecraft-launcher/".to_string();
   }
 } 
+
+pub fn get_py_path() -> String {
+  #[cfg(target_os = "windows")] {
+    return "py".to_string();
+  }
+  #[cfg(target_os = "linux")] {
+    return "python3".to_string();
+  }
+}
