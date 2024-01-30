@@ -5,55 +5,17 @@ mod run;
 mod utils;
 mod install;
 
-use tauri::Window;
 use run::{run_explorer, run_minecraft};
-use utils::get_minecraft_path;
-
-
-#[tauri::command]
-fn get_installed_versions() -> Vec<String> {
-	let path = get_minecraft_path();
-
-	utils::get_installed_versions(path)
-		.iter()
-		.map(|x| x.id.clone())
-		.collect()
-}
-
-#[tauri::command]
-fn install_minecraft_version(window: Window, version: String) {
-	install::install_minecraft_version(window, version, get_minecraft_path());
-}
-
-#[tauri::command]
-async fn get_version_list() -> Vec<String> {
-	let versions = utils::get_version_list().await;
-
-	match versions {
-		Ok(versions) => {
-
-			let versions = versions
-				.iter()
-				.map(|x| x.id.clone())
-				.collect();
-
-			return versions;
-		}
-		Err(e) => {
-			println!("Error: {}", e);
-			return Vec::new();
-		}
-	}
-}
+use install::{get_version_list, get_installed_versions, install_minecraft_version};
 
 fn main() {
 	tauri::Builder::default()
 		.invoke_handler(tauri::generate_handler![
+			run_explorer,
 			run_minecraft,
-			get_installed_versions,
 			get_version_list,
+			get_installed_versions,
 			install_minecraft_version,
-			run_explorer
 		])
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");

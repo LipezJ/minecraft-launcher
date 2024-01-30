@@ -22,7 +22,7 @@ pub struct MinecraftVersionList {
   pub versions: Vec<MineVersionInfo>
 }
 
-pub fn get_installed_versions(path: String) -> Vec<MineVersionInfo> {
+pub fn search_installed_versions(path: String) -> Vec<MineVersionInfo> {
 
   let path = path + "/versions";
 
@@ -70,7 +70,7 @@ pub fn get_installed_versions(path: String) -> Vec<MineVersionInfo> {
 
 }
 
-pub async fn get_version_list() -> Result<Vec<MineVersionInfo>, Error> {
+pub async fn fetch_version_list() -> Result<Vec<MineVersionInfo>, Error> {
 
   let url = "https://launchermeta.mojang.com/mc/game/version_manifest_v2.json";
   let url = reqwest::Url::parse(url).unwrap();
@@ -83,7 +83,7 @@ pub async fn get_version_list() -> Result<Vec<MineVersionInfo>, Error> {
   Ok(res.versions)
 }
 
-pub fn get_minecraft_path() -> String{
+pub fn get_minecraft_path() -> String {
 	let user = std::env::var("USERNAME").unwrap();
 	#[cfg(target_os = "windows")]
 	return format!("C:\\Users\\{}\\AppData\\Roaming\\.minecraft", user);

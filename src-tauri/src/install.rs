@@ -1,12 +1,15 @@
 use tauri::{api::process::{Command, CommandEvent}, Window};
-use crate::utils::{get_py_path, get_os_path};
+use crate::utils::{
+  fetch_version_list, get_minecraft_path, get_os_path, get_py_path, search_installed_versions
+};
 
-pub fn install_minecraft_version(window: Window, version: String, path: String) {
+#[tauri::command]
+pub fn install_minecraft_version(window: Window, version: String) {
 
   let scripts_path = get_os_path() + "scripts/install.py";
 
   let (mut rx, _) = Command::new(get_py_path())
-    .args([&scripts_path, &version, &path])
+    .args([&scripts_path, &version, &get_minecraft_path()])
     .spawn()
     .expect("failed to execute process");
 
@@ -31,4 +34,35 @@ pub fn install_minecraft_version(window: Window, version: String, path: String) 
   });
 
   println!("Done!");
+}
+
+#[tauri::command]
+pub async fn get_version_list() -> Vec<String> {
+	let versions = fetch_version_list().await;
+
+	match versions {
+		Ok(versions) => {
+
+			let versions = versions
+				.iter()
+				.map(|x| x.id.clone())
+				.collect();
+
+			return versions;
+		}
+		Err(e) => {
+			println!("Error: {}", e);
+			return Vec::new();
+		}
+	}
+}
+
+#[tauri::command]
+pub fn get_installed_versions() -> Vec<String> {
+	let path = get_minecraft_path();
+
+	search_installed_versions(path)
+		.iter()
+		.map(|x| x.id.clone())
+		.collect()
 }
