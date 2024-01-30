@@ -84,11 +84,26 @@ pub async fn fetch_version_list() -> Result<Vec<MineVersionInfo>, Error> {
 }
 
 pub fn get_minecraft_path() -> String {
-	let user = std::env::var("USERNAME").unwrap();
-	#[cfg(target_os = "windows")]
-	return format!("C:\\Users\\{}\\AppData\\Roaming\\.minecraft", user);
-	#[cfg(target_os = "linux")]
-	return format!("/home/{}/.minecraft", user);
+
+	#[cfg(target_os = "windows")] {
+    use std::path::PathBuf;
+
+    let appdata = std::env::var("APPDATA").unwrap_or_else(|_| {
+      let mut path = dirs::home_dir().expect("Failed to get user's home directory");
+      path.push("AppData");
+      path.push("Roaming");
+      path.into_os_string().into_string().unwrap()
+    });
+    let mut minecraft_dir = PathBuf::from(appdata);
+    minecraft_dir.push(".minecraft");
+    return minecraft_dir.to_string_lossy().to_string();
+  }
+
+	#[cfg(target_os = "linux")] {
+    let mut minecraft_dir = dirs::home_dir().expect("Failed to get user's home directory");
+    minecraft_dir.push(".minecraft");
+    return minecraft_dir.to_string_lossy().to_string();
+  }
 }
 
 pub fn get_os_path() -> String {
