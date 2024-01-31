@@ -1,6 +1,5 @@
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
-use serde_json::Number;
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
