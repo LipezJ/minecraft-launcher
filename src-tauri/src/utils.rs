@@ -1,5 +1,6 @@
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
+use serde_json::Number;
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -49,7 +50,10 @@ pub fn search_installed_versions(path: String) -> Vec<MineVersionInfo> {
           let id = jsoninfo["id"].to_string().replace("\"", "");
           let r#type = jsoninfo["type"].to_string();
           let release_time = jsoninfo["releaseTime"].to_string();
-          let compliance_level = jsoninfo["complianceLevel"].as_i64().unwrap();
+          let compliance_level = match &jsoninfo["complianceLevel"] {
+            serde_json::Value::Number(value) => value.as_i64().unwrap(),
+            _ => 0
+          };
 
           versions.push(MineVersionInfo {
             id,
