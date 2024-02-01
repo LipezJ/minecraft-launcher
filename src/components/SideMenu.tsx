@@ -6,17 +6,21 @@ export function SideMenu() {
 
 	return (
 		<ul className="space-y-2 font-medium">
-			<MenuElement text="Settings" icon={
-				<svg 
-					className="w-6 h-6 text-gray-800 dark:text-white" 
-					aria-hidden="true" 
-					xmlns="http://www.w3.org/2000/svg" 
-					fill="currentColor" 
-					viewBox="0 0 24 24"
-				>
-					<path d="M10.8 5a3 3 0 0 0-5.6 0H4a1 1 0 1 0 0 2h1.2a3 3 0 0 0 5.6 0H20a1 1 0 1 0 0-2h-9.2ZM4 11h9.2a3 3 0 0 1 5.6 0H20a1 1 0 1 1 0 2h-1.2a3 3 0 0 1-5.6 0H4a1 1 0 1 1 0-2Zm1.2 6H4a1 1 0 1 0 0 2h1.2a3 3 0 0 0 5.6 0H20a1 1 0 1 0 0-2h-9.2a3 3 0 0 0-5.6 0Z"/>
-				</svg>
-			} />
+			<MenuElement 
+				text="Settings"
+				onClick={() => ModalManager.show('settings-modal')} 
+				icon={
+					<svg 
+						className="w-6 h-6 text-gray-800 dark:text-white" 
+						aria-hidden="true" 
+						xmlns="http://www.w3.org/2000/svg" 
+						fill="currentColor" 
+						viewBox="0 0 24 24"
+					>
+						<path d="M10.8 5a3 3 0 0 0-5.6 0H4a1 1 0 1 0 0 2h1.2a3 3 0 0 0 5.6 0H20a1 1 0 1 0 0-2h-9.2ZM4 11h9.2a3 3 0 0 1 5.6 0H20a1 1 0 1 1 0 2h-1.2a3 3 0 0 1-5.6 0H4a1 1 0 1 1 0-2Zm1.2 6H4a1 1 0 1 0 0 2h1.2a3 3 0 0 0 5.6 0H20a1 1 0 1 0 0-2h-9.2a3 3 0 0 0-5.6 0Z"/>
+					</svg>
+				} 
+			/>
 			<MenuElement 
 				text="Install" 
 				onClick={() => ModalManager.show('install-modal')}
