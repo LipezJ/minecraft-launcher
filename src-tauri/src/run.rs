@@ -1,14 +1,21 @@
 use tauri::Window;
 use tauri::api::process::{Command ,CommandEvent};
-use crate::utils::{get_minecraft_path, get_os_path, get_py_path};
+use crate::utils::{get_minecraft_path, get_os_path, get_py_path, get_command_params};
 
 #[tauri::command]
-pub fn run_minecraft(window: Window, version: String, username: String) {
+pub async fn run_minecraft(window: Window, version: String, username: String) {
 
 	let scripts_path = get_os_path() + "scripts/run.py";
 
+	let settings = get_command_params(username).await;
+
   let (mut rx, _) = Command::new(get_py_path())
-		.args(&[&scripts_path, &version, &get_minecraft_path(), username.as_str()])
+		.args([ 
+			scripts_path, 
+			version, 
+			get_minecraft_path(), 
+			serde_json::to_string(&settings).unwrap() 
+		])
 		.spawn()
 		.expect("failed to execute process");
 

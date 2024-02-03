@@ -23,6 +23,7 @@
 	},
 	"plugins": ["@typescript-eslint", "preact"],
 	"rules": {
+		"react/no-unknown-property": "on",
 		"react/react-in-jsx-scope": "off",
 		"react/jsx-uses-react": "off",
 		"indent": ["error", "tab"],

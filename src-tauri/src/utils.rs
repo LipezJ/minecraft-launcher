@@ -1,5 +1,6 @@
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
+use crate::store::get_settings;
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -20,6 +21,19 @@ pub struct MinecraftLatestInfo {
 pub struct MinecraftVersionList {
   pub latest: MinecraftLatestInfo,
   pub versions: Vec<MineVersionInfo>
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
+pub struct CommandParmas {
+  pub username: String,
+  pub uuid: String,
+  pub token: String,
+  pub jvm_arguments: [String; 2],
+  pub custom_resolution: bool,
+  pub resolution_width: String,
+  pub resolution_height: String,
+  pub custom_directory: String
 }
 
 pub fn search_installed_versions(path: String) -> Vec<MineVersionInfo> {
@@ -125,4 +139,32 @@ pub fn get_py_path() -> String {
   #[cfg(target_os = "linux")] {
     return "python3".to_string();
   }
+}
+
+pub async fn get_command_params(username: String) -> CommandParmas {
+  
+  let settings = get_settings().await.unwrap();
+
+  let max = format!("-Xmx{}M", settings["ram"]["max"].as_i64().unwrap());
+  let min = format!("-Xms{}M", settings["ram"]["min"].as_i64().unwrap());
+  let width = settings["resolution"]["width"].as_str().unwrap();
+  let height = settings["resolution"]["height"].as_str().unwrap();
+  let custom_res = settings["customResolution"].as_bool().unwrap();
+  let uuid = settings["uuid"].as_str().unwrap();
+  let token = settings["token"].as_str().unwrap();
+  let custom_dir = settings["gameDirectory"].as_str().unwrap();
+  
+  let params = CommandParmas {
+    username,
+    uuid: uuid.to_owned(),
+    token: token.to_owned(),
+    jvm_arguments: [ min, max ],
+    custom_resolution: custom_res,
+    resolution_width: width.to_owned(),
+    resolution_height: height.to_owned(),
+    custom_directory: custom_dir.to_owned()
+  };
+
+  return params;
+
 }
