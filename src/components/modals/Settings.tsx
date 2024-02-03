@@ -15,7 +15,6 @@ export function Settings() {
 
 	useEffect(() => {
 		ModalManager.init(modal, 'settings-modal')
-		ModalManager.show('settings-modal')
 	}, [])
 
 	const handleSubmit = (e: Event) => {
