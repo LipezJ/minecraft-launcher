@@ -20,6 +20,7 @@ export interface Storage {
 
 export default class StorageManager {
 
+	static uuid = ''
 	static storage = new Store('.settings.dat')
 	static settings = signal< Storage | undefined >(undefined)
 
@@ -29,6 +30,7 @@ export default class StorageManager {
 
 		if (settings) {
 			this.settings.value = settings
+			this.uuid = settings.uuid
 		} else {
 			// error handling
 		}
@@ -73,7 +75,7 @@ export class SettingsStorage {
 			},
 			customResolution: Boolean(data.get('customr')),
 			gameDirectory: data.get('gamedir') as string,
-			uuid: '',
+			uuid: StorageManager.uuid,
 			token: '',
 			defaultExecutablePath: '',
 			pythonPath: ''

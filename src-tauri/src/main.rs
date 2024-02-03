@@ -6,6 +6,7 @@ mod store;
 mod utils;
 mod install;
 
+use uuid::Uuid;
 use std::sync::OnceLock;
 use tauri::{App, AppHandle};
 use tauri_plugin_store::StoreBuilder;
@@ -45,6 +46,10 @@ pub fn setup_app(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 			".settings.dat".parse()?
 		).build();
 
+	// This is only for the development version
+	// To get the uuid you have to log in with Microsoft
+	let uuid = Uuid::new_v4().to_string(); 
+
 	store.insert("mc-settings".to_owned(), serde_json::json!({
 		"ram": {
 			"min": 1000,
@@ -54,7 +59,7 @@ pub fn setup_app(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 			"width": "1080",
 			"height": "720",
 		},
-		"uuid": "14edc18c-febf-47ca-90fb-8ef3e35ffb63",
+		"uuid": uuid,
 		"token": "",
 		"customResolution": false,
 		"defaultExecutablePath": "",
