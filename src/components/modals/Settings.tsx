@@ -1,6 +1,6 @@
 import Modal from '../ui/Modal'
 import { SettingsStorage } from '../../lib/storage'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useRef } from 'preact/hooks'
 
 import { ModalManager } from '../../lib/modals'
 import { InputText } from '../ui/Input'
@@ -11,11 +11,10 @@ export function Settings() {
 
 	const modal = useRef<HTMLDivElement>(null)
 	const data = SettingsStorage.get()
-	const [ reso, setReso ] = useState(false)
+	const reso = data?.customResolution
 
 	useEffect(() => {
 		ModalManager.init(modal, 'settings-modal')
-		setReso(data?.customResolution ?? false)
 	}, [])
 
 	const handleSubmit = (e: Event) => {
@@ -90,7 +89,7 @@ export function Settings() {
 								Custom resolution
 							</span>
 							<input 
-								onChange={() => setReso((prev) => !prev)}
+								onChange={SettingsStorage.toggleResolution}
 								type="checkbox" 
 								name="customr" 
 								class="sr-only peer" 
