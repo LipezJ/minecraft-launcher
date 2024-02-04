@@ -11,10 +11,11 @@ export function Settings() {
 
 	const modal = useRef<HTMLDivElement>(null)
 	const data = SettingsStorage.get()
-	const [ reso, setReso ] = useState(data?.customResolution)
+	const [ reso, setReso ] = useState(false)
 
 	useEffect(() => {
 		ModalManager.init(modal, 'settings-modal')
+		setReso(data?.customResolution ?? false)
 	}, [])
 
 	const handleSubmit = (e: Event) => {
