@@ -1,7 +1,7 @@
 import { signal } from '@preact/signals'
 import { Store } from 'tauri-plugin-store-api'
 
-export interface Storage {
+export interface SettingStorage {
 	ram: {
 		min: number;
 		max: number;
@@ -21,39 +21,43 @@ export interface Storage {
 export default class StorageManager {
 
 	static uuid = ''
-	static storage = new Store('.settings.dat')
-	static settings = signal< Storage | undefined >(undefined)
+	static stores = signal<Record<string, Store>>({})
 
-	static async init() {
+	static async addStorage(path: string) {
 
-		const settings = await this.storage.get<Storage>('mc-settings')
+		const store = new Store(path)
 
-		if (settings) {
-			this.settings.value = settings
-			this.uuid = settings.uuid
-		} else {
-			// error handling
+		this.stores.value = {
+			...this.stores.value,
+			[path]: store
 		}
+
+		return store
 	}
 
-	static getSettings() {
-		return this.settings.value
-	}
-
-	static async setSettings(settings: Storage) {
-		
-		await this.storage.set('mc-settings', settings)
-		await this.storage.save()
-		
-		this.settings.value = settings
+	static async getStorage(path: string) {
+		return this.stores.value[path]
 	}
 
 }
 
 export class SettingsStorage {
 
+	static settings = signal<SettingStorage | undefined >(undefined)
+
+	static {
+		StorageManager.addStorage('.settings.dat')
+			.then(async (storage) => {
+
+				const settings = await storage.get<SettingStorage>('mc-settings')
+
+				if (settings != null)
+					SettingsStorage.settings.value = settings
+			})
+	}
+
 	static get() {
-		return StorageManager.getSettings()
+		return this.settings.value
 	}
 
 	static save(data: FormData) {
@@ -64,7 +68,7 @@ export class SettingsStorage {
 		if (width == null) width = '1080'
 		if (height == null) height = '720'
 
-		const settings: Storage = {
+		const settings: SettingStorage = {
 			ram: {
 				min: Number(data.get('memmin')),
 				max: Number(data.get('memmax'))
@@ -81,7 +85,33 @@ export class SettingsStorage {
 			pythonPath: ''
 		}
 
-		StorageManager.setSettings(settings)
+		this.setSettings(settings)
+	}
+
+	static toggleResolution() {
+
+		const settings = SettingsStorage.settings
+
+		if (settings.value == null) return
+
+		SettingsStorage.settings.value = {
+			...settings.value,
+			customResolution: !settings.value?.customResolution
+		}
+	}
+
+	static async setSettings(settings: SettingStorage) {
+
+		const storage = await StorageManager.getStorage('.settings.dat')
+
+		await storage.set('mc-settings', settings)
+		await storage.save()
+		
+		SettingsStorage.settings.value = settings
+	}
+
+	static getSettings() {
+		return this.settings.value
 	}
 
 }
