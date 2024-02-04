@@ -6,10 +6,9 @@ mod store;
 mod utils;
 mod install;
 
-use uuid::Uuid;
 use std::sync::OnceLock;
 use tauri::{App, AppHandle};
-use tauri_plugin_store::StoreBuilder;
+use store::init_settings_store;
 use run::{run_explorer, run_minecraft};
 use install::{get_version_list, get_installed_versions, install_minecraft_version};
 
@@ -25,7 +24,7 @@ fn main() {
 			install_minecraft_version,
 		])
 		.plugin(tauri_plugin_store::Builder::default().build())
-		.setup(|app| setup_app(app))  
+		.setup(|app| setup_app(app))
 		.run(tauri::generate_context!())
 		.expect("error while running tauri application");
 }
@@ -40,34 +39,8 @@ pub fn get_app() -> AppHandle {
 pub fn setup_app(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 
 	APP.get_or_init(move || app.handle());
-	
-	let mut store = StoreBuilder::new(
-			app.handle(), 
-			".settings.dat".parse()?
-		).build();
 
-	// This is only for the development version
-	// To get the uuid you have to log in with Microsoft
-	let uuid = Uuid::new_v4().to_string(); 
-
-	store.insert("mc-settings".to_owned(), serde_json::json!({
-		"ram": {
-			"min": 1000,
-			"max": 1000,
-		},
-		"resolution": {
-			"width": "1080",
-			"height": "720",
-		},
-		"uuid": uuid,
-		"token": "",
-		"customResolution": false,
-		"defaultExecutablePath": "",
-		"gameDirectory": "",
-		"pythonPath": "",
-	}))?;
-
-	store.save()?;
+	init_settings_store(app)?;
 
 	Ok(())
 }
