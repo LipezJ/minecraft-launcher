@@ -20,7 +20,6 @@ export interface SettingStorage {
 
 export default class StorageManager {
 
-	static uuid = ''
 	static stores = signal<Record<string, Store>>({})
 
 	static async addStorage(path: string) {
@@ -51,8 +50,13 @@ export class SettingsStorage {
 
 				const settings = await storage.get<SettingStorage>('mc-settings')
 
-				if (settings != null)
+				if (settings != null) {
+					if (settings.uuid == '') {
+						settings.uuid = crypto.randomUUID()
+						this.setSettings(settings)
+					}
 					SettingsStorage.settings.value = settings
+				}
 			})
 	}
 
@@ -79,7 +83,7 @@ export class SettingsStorage {
 			},
 			customResolution: Boolean(data.get('customr')),
 			gameDirectory: data.get('gamedir') as string,
-			uuid: StorageManager.uuid,
+			uuid: this.settings.value?.uuid ?? crypto.randomUUID(),
 			token: '',
 			defaultExecutablePath: '',
 			pythonPath: ''
