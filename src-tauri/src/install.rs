@@ -4,11 +4,11 @@ use crate::utils::{
 };
 
 #[tauri::command]
-pub fn install_minecraft_version(window: Window, version: String) {
+pub async fn install_minecraft_version(window: Window, version: String) {
 
   let scripts_path = get_os_path() + "scripts/install.py";
 
-  let (mut rx, _) = Command::new(get_py_path())
+  let (mut rx, _) = Command::new(get_py_path().await)
     .args([&scripts_path, &version, &get_minecraft_path()])
     .spawn()
     .expect("failed to execute process");

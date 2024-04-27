@@ -123,6 +123,32 @@ export function Settings() {
 						<InputText className="w-full" name="gamedir" placeholder="<Default>" />
 					</div>
 				</section>
+				<section>
+					<span className="block mt-2 mb-1 text-sm font-medium text-white">
+						Python Path or env
+						<Badge color="!bg-orange-500 text-white w-fit mb-2" >
+							important!
+						</Badge>
+					</span>
+					<div className="ml-2 flex gap-2 items-center">
+						<svg 
+							className="w-6 h-6 text-gray-800 dark:text-white" 
+							aria-hidden="true" 
+							xmlns="http://www.w3.org/2000/svg" 
+							width="24" 
+							height="24" 
+							fill="currentColor" 
+							viewBox="0 0 24 24"
+						>
+							<path 
+								fill-rule="evenodd" 
+								d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Zm-.293 9.293a1 1 0 0 1 0 1.414L9.414 14l1.293 1.293a1 1 0 0 1-1.414 1.414l-2-2a1 1 0 0 1 0-1.414l2-2a1 1 0 0 1 1.414 0Zm2.586 1.414a1 1 0 0 1 1.414-1.414l2 2a1 1 0 0 1 0 1.414l-2 2a1 1 0 0 1-1.414-1.414L14.586 14l-1.293-1.293Z" 
+								clip-rule="evenodd"
+							/>
+						</svg>
+						<InputText className="w-full" name="python" placeholder="py" />
+					</div>
+				</section>
 				<section className="mt-4 self-end">
 					<button type="submit" class="text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center me-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
 					<svg 

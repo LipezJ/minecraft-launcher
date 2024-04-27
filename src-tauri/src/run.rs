@@ -9,7 +9,7 @@ pub async fn run_minecraft(window: Window, version: String, username: String) {
 
 	let settings = get_command_params(username).await;
 
-  let (mut rx, _) = Command::new(get_py_path())
+  let (mut rx, _) = Command::new(get_py_path().await)
 		.args([ 
 			scripts_path, 
 			version, 

@@ -1,6 +1,6 @@
 use reqwest::Error;
 use serde::{Deserialize, Serialize};
-use crate::store::get_settings;
+use crate::store::{get_setting_value, get_settings};
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -132,13 +132,29 @@ pub fn get_os_path() -> String {
   }
 } 
 
-pub fn get_py_path() -> String {
+pub fn get_py_path_default() -> String {
   #[cfg(target_os = "windows")] {
-    return "py".to_string();
+    return "python".to_string();
   }
   #[cfg(target_os = "linux")] {
     return "python3".to_string();
   }
+}
+
+pub async fn get_py_path() -> String {
+
+  let mut py_path = get_py_path_default();
+
+  match get_setting_value("pythonPath".to_string()).await {
+    Some(value) => {
+      if let serde_json::Value::String(path) = value {
+        py_path = path;
+      }
+    },
+    None => {}
+  };
+
+  return py_path;
 }
 
 pub async fn get_command_params(username: String) -> CommandParmas {

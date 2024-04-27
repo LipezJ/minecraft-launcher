@@ -86,7 +86,7 @@ export class SettingsStorage {
 			uuid: this.settings.value?.uuid ?? crypto.randomUUID(),
 			token: '',
 			defaultExecutablePath: '',
-			pythonPath: ''
+			pythonPath: data.get('python') as string ?? ''
 		}
 
 		this.setSettings(settings)

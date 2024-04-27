@@ -36,6 +36,17 @@ pub async fn get_settings() -> Option<Map<String, Value>> {
 
 }
 
+pub async fn get_setting_value(name: String) -> Option<Value> {
+	let settings = get_settings().await;
+	
+	match settings {
+		Some(settings) => {
+			Some(settings[&name.to_string()].clone())
+		},
+		None => None
+	}
+}
+
 pub fn init_settings_store(app: &App) -> Result<(), Box<dyn std::error::Error>> {
 
   let stores = app.state::<StoreCollection<Wry>>();
